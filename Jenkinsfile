@@ -21,7 +21,7 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
         properties([
             parameters([
                 string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
-                string(defaultValue: 'latest', description: 'version à déployer', name: 'chart')
+                string(defaultValue: '', description: 'chart à déployer', name: 'chart')
             ]),
             buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '',
                 daysToKeepStr: '1', numToKeepStr: '3')),
@@ -40,9 +40,9 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    sh "if [ `helm list | grep chart | wc -l` == '0' ]; then helm install --name chart --set-string image.tag=${params.image} meltingpoc-charts/${param.chart}; fi"
+                    sh "if [ `helm list | grep chart | wc -l` == '0' ]; then helm install --name chart --set-string image.tag=${param.image} meltingpoc-charts/${param.chart}; fi"
 
-                    sh "if [ `helm list | grep chart | wc -l` == '1' ]; then helm upgrade chart --set-string image.tag=${params.image} meltingpoc-charts/${param.chart}; fi"
+                    sh "if [ `helm list | grep chart | wc -l` == '1' ]; then helm upgrade chart --set-string image.tag=${param.image} meltingpoc-charts/${param.chart}; fi"
                 }
             }
         }
