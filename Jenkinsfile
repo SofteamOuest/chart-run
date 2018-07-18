@@ -36,7 +36,7 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
             stage('upgrade') {
                 withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
-                    sh "helm init"
+                    sh "helm init --client-only"
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
