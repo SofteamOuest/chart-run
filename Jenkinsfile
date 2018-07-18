@@ -40,9 +40,9 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    sh "if [ `helm list | grep chart | wc -l` == '0' ]; then helm install --name chart --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep chart | wc -l` == '0' ]; then helm install --name ${params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
 
-                    sh "if [ `helm list | grep chart | wc -l` == '1' ]; then helm upgrade chart --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep chart | wc -l` == '1' ]; then helm upgrade ${params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
                 }
             }
         }
