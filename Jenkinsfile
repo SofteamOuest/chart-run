@@ -1,8 +1,8 @@
 #!groovy
-import java.text.SimpleDateFormat
+
 
 // pod utilisé pour la compilation du projet
-podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
+podTemplate(label: 'chart-run-pod', containers: [
 
         // le slave jenkins
         containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:alpine'),
