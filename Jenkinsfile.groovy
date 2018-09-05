@@ -19,17 +19,18 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
     node('chart-run-pod') {
 
         properties([
-            parameters([
-                string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
-                string(defaultValue: '', description: 'chart à déployer', name: 'chart')
-            ]),
-            buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '',
-                daysToKeepStr: '1', numToKeepStr: '3')),
-            pipelineTriggers([])])
+                parameters([
+                        string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
+                        string(defaultValue: '', description: 'chart à déployer', name: 'chart'),
+                        string(defaultValue: '', description: 'env', name: 'env')
+                ]),
+                buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '',
+                        daysToKeepStr: '1', numToKeepStr: '3')),
+                pipelineTriggers([])])
 
         stage('checkout sources') {
             checkout scm;
-         }
+        }
 
         container('helm') {
 
@@ -40,9 +41,9 @@ podTemplate(label: 'chart-run-pod', nodeSelector: 'medium', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    sh "if [ `helm list | grep ^${params.chart} | wc -l` == '0' ]; then helm install --name ${params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep ^${params.chart} | wc -l` == '0' ]; then helm install --name ${params.env != '' ? params.chart + params.env : params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
 
-                    sh "if [ `helm list | grep ^${params.chart} | wc -l` == '1' ]; then helm upgrade ${params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep ^${params.chart} | wc -l` == '1' ]; then helm upgrade ${params.env != '' ? params.chart + params.env : params.chart} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
                 }
             }
         }
