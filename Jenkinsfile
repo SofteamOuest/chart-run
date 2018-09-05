@@ -43,9 +43,9 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     def chartName = params.env != '' ? params.chart + "-" + params.env : params.chart + "-" + "master"
 
-                    sh "if [ `helm list | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${chartName} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${chartName} --set-string env=${params.env} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
 
-                    sh "if [ `helm list | grep ^${chartName} | wc -l` == '1' ]; then helm upgrade ${chartName} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
+                    sh "if [ `helm list | grep ^${chartName} | wc -l` == '1' ]; then helm upgrade ${chartName} --set-string env=${params.env} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}; fi"
                 }
             }
         }
