@@ -39,15 +39,13 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    def chartName = params.chart + '-' + params.env
-
                     def platform = params.env == 'prod' ? '' : '-' + params.env
 
                     def options = "--namespace ${params.env} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}"
 
-                    sh "if [ `helm list --namespace ${params.env} | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${params.chart} ${options}; fi"
+                    sh "if [ `helm list --namespace ${params.env} | grep ^${params.chart} | wc -l` == '0' ]; then helm install --name ${params.chart} ${options}; fi"
 
-                    sh "if [ `helm list --namespace ${params.env} | grep ^${chartName} | wc -l` == '1' ]; then helm upgrade ${params.chart} ${options}; fi"
+                    sh "if [ `helm list --namespace ${params.env} | grep ^${params.chart} | wc -l` == '1' ]; then helm upgrade ${params.chart} ${options}; fi"
                 }
             }
         }
