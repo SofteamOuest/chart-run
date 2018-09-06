@@ -41,7 +41,7 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     def platform = params.env == 'prod' ? '' : '-' + params.env
 
-                    def options = "--namespace ${params.env} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart} --set ingress.hosts=[${params.chart}.k8.wildwidewest.xyz] --set ingress.tls.hosts=[${params.chart}.k8.wildwidewest.xyz]"
+                    def options = "--namespace ${params.env} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart} --set ingress.hosts[0]=${params.chart}.k8.wildwidewest.xyz] --set ingress.tls.hosts[0]=${params.chart}.k8.wildwidewest.xyz"
 
                     sh "if [ `helm list --namespace ${params.env} | grep ^${params.chart} | wc -l` == '0' ]; then helm install --name ${params.chart} ${options}; fi"
 
