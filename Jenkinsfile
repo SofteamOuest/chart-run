@@ -41,7 +41,7 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    def chartName = params.env == '' ? params.chart : params.chart + "-" params.env
+                    def chartName = params.env == '' ? params.chart : params.chart + "-" + params.env
 
                     def namespace = params.env == '' ? 'default' : params.env
 
