@@ -45,7 +45,7 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     def platform = params.env == 'prod' ? '' : '-' + params.env
 
-                    def options = "--namespace ${namespace} --set-string env=platform --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}"
+                    def options = "--namespace ${namespace} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}"
 
                     sh "if [ `helm list --namespace ${namespace} | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${chartName} ${options}; fi"
 
