@@ -41,9 +41,9 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    def chartName = params.chart
+                    def chartName = params.env == '' ? params.chart : params.chart + "-" params.env
 
-                    def namespace = params.env != '' ? params.env : 'default'
+                    def namespace = params.env == '' ? 'default' : params.env
 
                     sh "if [ `helm list --namespace ${namespace} | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${chartName} --namespace ${namespace} meltingpoc-charts/${params.chart}; fi"
 
