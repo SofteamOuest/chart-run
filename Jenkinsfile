@@ -23,10 +23,8 @@ podTemplate(label: 'chart-run-pod', containers: [
                         string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
                         string(defaultValue: '', description: 'chart à déployer', name: 'chart'),
                         string(defaultValue: '', description: 'env', name: 'env')
-                ]),
-                buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '',
-                        daysToKeepStr: '1', numToKeepStr: '3')),
-                pipelineTriggers([])])
+                ])
+                ])
 
         stage('checkout sources') {
             checkout scm;
