@@ -22,7 +22,7 @@ podTemplate(label: 'chart-run-pod', containers: [
                 parameters([
                         string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
                         string(defaultValue: '', description: 'chart à déployer', name: 'chart'),
-                        string(defaultValue: '', description: 'env', name: 'env')
+                        string(defaultValue: 'dev', description: 'env', name: 'env')
                 ])
                 ])
 
@@ -39,17 +39,15 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     sh "helm repo add meltingpoc-charts https://softeamouest.github.io/charts"
 
-                    def chartName = params.env == '' ? params.chart : params.chart + "-" + params.env
-
-                    def namespace = params.env == '' ? 'default' : params.env
+                    def chartName = params.chart + '-' + + params.env
 
                     def platform = params.env == 'prod' ? '' : '-' + params.env
 
-                    def options = "--namespace ${namespace} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}"
+                    def options = "--namespace ${params.env} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart}"
 
-                    sh "if [ `helm list --namespace ${namespace} | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${chartName} ${options}; fi"
+                    sh "if [ `helm list --namespace ${params.env} | grep ^${chartName} | wc -l` == '0' ]; then helm install --name ${params.chart} ${options}; fi"
 
-                    sh "if [ `helm list --namespace ${namespace} | grep ^${chartName} | wc -l` == '1' ]; then helm upgrade ${chartName} ${options}; fi"
+                    sh "if [ `helm list --namespace ${params.env} | grep ^${chartName} | wc -l` == '1' ]; then helm upgrade ${params.chart} ${options}; fi"
                 }
             }
         }
