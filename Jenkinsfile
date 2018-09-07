@@ -22,7 +22,7 @@ podTemplate(label: 'chart-run-pod', containers: [
                 parameters([
                         string(defaultValue: 'latest', description: 'Version à déployer', name: 'image'),
                         string(defaultValue: '', description: 'Nom du chart à deployer', name: 'chart'),
-                        string(defaultValue: '', description: 'URL de l'application ', name: 'alias'),
+                        string(defaultValue: '', description: 'URL de l application', name: 'alias'),
                         string(defaultValue: 'dev', description: 'Environnement de déploiement', name: 'env')
                 ])
                 ])
