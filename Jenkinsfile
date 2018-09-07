@@ -20,9 +20,10 @@ podTemplate(label: 'chart-run-pod', containers: [
 
         properties([
                 parameters([
-                        string(defaultValue: 'latest', description: 'version à déployer', name: 'image'),
-                        string(defaultValue: '', description: 'chart à déployer', name: 'chart'),
-                        string(defaultValue: 'dev', description: 'env', name: 'env')
+                        string(defaultValue: 'latest', description: 'Version à déployer', name: 'image'),
+                        string(defaultValue: '', description: 'Nom du chart à deployer', name: 'chart'),
+                        string(defaultValue: '', description: 'URL de l'application ', name: 'alias'),
+                        string(defaultValue: 'dev', description: 'Environnement de déploiement', name: 'env')
                 ])
                 ])
 
@@ -41,7 +42,7 @@ podTemplate(label: 'chart-run-pod', containers: [
 
                     def platform = params.env == 'prod' ? '' : '-' + params.env
 
-                    def url = "${params.chart}${platform}.k8.wildwidewest.xyz"
+                    def url = params.alias == '' : "${params.chart}${platform}.k8.wildwidewest.xyz" ? "${params.alias}${platform}.k8.wildwidewest.xyz"
 
                     def options = "--namespace ${params.env} --set-string env=${platform} --set-string image.tag=${params.image} meltingpoc-charts/${params.chart} --set ingress.hosts[0]=${url},ingress.tls[0].hosts[0]=${url}"
 
