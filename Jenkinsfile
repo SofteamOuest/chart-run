@@ -27,7 +27,7 @@ podTemplate(label: 'chart-run-pod', containers: [
                 ])
                 ])
 
-        stage('checkout sources') {
+        stage('CHECKOUT') {
             checkout scm;
         }
 
